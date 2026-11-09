@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:layoutDirection="rtl"
+    android:paddingVertical="10dp"> <!-- تقليل المسافة من 16 إلى 10 -->
+
+    <!-- اليمين: اسم اليوم والأيقونة -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/tvForecastIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="⛈️"
+            android:textSize="20sp"
+            android:layout_marginEnd="10dp"/>
+
+        <TextView
+            android:id="@+id/tvForecastDay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="اليوم"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+    <!-- اليسار: درجات الحرارة -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/tvForecastTempMax"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="32°"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" / "
+            android:textColor="#B0FFFFFF"
+            android:textSize="16sp"
+            android:layout_marginHorizontal="4dp"/>
+
+        <TextView
+            android:id="@+id/tvForecastTempMin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="25°"
+            android:textColor="#B0FFFFFF"
+            android:textSize="16sp"/>
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,27 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    
+    <!-- الخلفية الدائرية الزرقاء -->
+    <path
+        android:fillColor="#1E3A8A"
+        android:pathData="M54,54m-54,0a54,54 0,1 1,108 0a54,54 0,1 1,-108 0"/>
+        
+    <!-- الشمس (دائرة صفراء) -->
+    <path
+        android:fillColor="#FFD54F"
+        android:pathData="M65,40m-15,0a15,15 0,1 1,30 0a15,15 0,1 1,-30 0"/>
+        
+    <!-- السحابة (بيضاء) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M75,75H33c-6.6,0 -12,-5.4 -12,-12s5.4,-12 12,-12c1.2,0 2.4,0.2 3.5,0.5C39.6,43.6 48,38 57,38c11.6,0 21,9.4 21,21v0c5.5,0 10,4.5 10,10s-4.5,10 -10,10H75z"/>
+    
+    <!-- لمسة زرقاء داخل السحابة -->
+    <path
+        android:fillColor="#3B82F6"
+        android:pathData="M75,75H55c0,-11 9,-20 20,-20c0,0 0,0 0,0c5.5,0 10,4.5 10,10s-4.5,10 -10,10z"
+        android:fillAlpha="0.2"/>
+</vector>

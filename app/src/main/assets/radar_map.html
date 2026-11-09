@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Weather Radar</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <style>
+        body { margin: 0; padding: 0; background-color: #0F172A; }
+        #map { width: 100vw; height: 100vh; background: #0F172A; z-index: 1; }
+        
+        /* 🌟 تطبيق الفلتر الداكن فقط على الخريطة الأساسية وليس على الرادار */
+        .base-map-tiles {
+            filter: brightness(0.6) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7);
+        }
+
+        .leaflet-control-zoom { display: none; }
+        
+        .time-control {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 85%;
+            background: rgba(15, 23, 42, 0.85);
+            border-radius: 24px;
+            padding: 15px;
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+        }
+        
+        .time-text { font-size: 15px; margin-bottom: 12px; font-weight: bold; color: #E2E8F0; }
+        
+        .slider-container { display: flex; width: 100%; align-items: center; }
+        
+        input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
+        input[type=range]:focus { outline: none; }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%; height: 6px; cursor: pointer;
+            background: rgba(255,255,255,0.2); border-radius: 3px;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            height: 20px; width: 20px; border-radius: 50%;
+            background: #38BDF8; cursor: pointer; -webkit-appearance: none;
+            margin-top: -7px; box-shadow: 0 0 10px #38BDF8;
+        }
+        
+        .floating-btns {
+            position: absolute; right: 20px; bottom: 120px; z-index: 1000;
+            display: flex; flex-direction: column; gap: 12px;
+        }
+        
+        .btn-circle {
+            width: 50px; height: 50px; border-radius: 50%;
+            background: rgba(30, 41, 59, 0.9); border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center;
+            font-size: 22px; color: white; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.2s;
+        }
+        
+        .btn-circle:active { background: #38BDF8; transform: scale(0.9); }
+    </style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<div class="time-control">
+    <div class="time-text" id="timeLabel">جاري تحميل بيانات الرادار...</div>
+    <div class="slider-container">
+        <input type="range" id="timeSlider" min="0" max="100" value="0">
+    </div>
+</div>
+
+<div class="floating-btns">
+    <div class="btn-circle" id="playBtn" onclick="togglePlay()">⏸️</div>
+    <div class="btn-circle" onclick="locateMe()">📍</div>
+</div>
+
+<script>
+    var lat = 14.5425;
+    var lon = 49.1242;
+
+    var map = L.map('map', {zoomControl: false}).setView([lat, lon], 7);
+
+    // 🌟 إضافة كلاس base-map-tiles للفلتر (ليجعل الخريطة داكنة فقط)
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors',
+        maxZoom: 19,
+        className: 'base-map-tiles' 
+    }).addTo(map);
+
+    L.circleMarker([lat, lon], {
+        radius: 8, fillColor: "#38BDF8", color: "#ffffff",
+        weight: 3, opacity: 1, fillOpacity: 1
+    }).addTo(map);
+
+    var radarLayers = [];
+    var currentFrame = 0;
+    var isPlaying = true;
+    var animationInterval;
+    var timeSlider = document.getElementById('timeSlider');
+    var timeLabel = document.getElementById('timeLabel');
+    var playBtn = document.getElementById('playBtn');
+
+    fetch('https://api.rainviewer.com/public/weather-maps.json')
+        .then(response => response.json())
+        .then(data => {
+            var host = data.host;
+            var pastFrames = data.radar.past;
+            
+            pastFrames.forEach((frame) => {
+                var tileUrl = host + frame.path + '/256/{z}/{x}/{y}/2/1_1.png';
+                // طبقة الرادار بدون فلتر، وبشفافية أعلى قليلاً
+                var layer = L.tileLayer(tileUrl, { opacity: 0.8, zIndex: 100 });
+                radarLayers.push(layer);
+            });
+
+            timeSlider.max = radarLayers.length - 1;
+            updateFrame(radarLayers.length - 1);
+            startAnimation();
+        })
+        .catch(err => {
+            timeLabel.innerText = "فشل تحميل البيانات (تأكد من الإنترنت)";
+        });
+
+    function updateFrame(index) {
+        currentFrame = index;
+        radarLayers.forEach(layer => { if (map.hasLayer(layer)) map.removeLayer(layer); });
+        if (radarLayers[currentFrame]) radarLayers[currentFrame].addTo(map);
+        timeSlider.value = currentFrame;
+        
+        var now = new Date();
+        var minutesAgo = (radarLayers.length - 1 - currentFrame) * 10;
+        now.setMinutes(now.getMinutes() - minutesAgo);
+        var hours = now.getHours().toString().padStart(2, '0');
+        var mins = now.getMinutes().toString().padStart(2, '0');
+        
+        if (currentFrame === radarLayers.length - 1) {
+            timeLabel.innerText = "⏱️ الآن (" + hours + ":" + mins + ")";
+        } else {
+            timeLabel.innerText = "⏳ قبل " + minutesAgo + " دقيقة (" + hours + ":" + mins + ")";
+        }
+    }
+
+    function startAnimation() {
+        if (animationInterval) clearInterval(animationInterval);
+        isPlaying = true;
+        playBtn.innerText = "⏸️";
+        animationInterval = setInterval(() => {
+            var nextFrame = currentFrame + 1;
+            if (nextFrame >= radarLayers.length) nextFrame = 0;
+            updateFrame(nextFrame);
+        }, 500);
+    }
+
+    function stopAnimation() {
+        clearInterval(animationInterval);
+        isPlaying = false;
+        playBtn.innerText = "▶️";
+    }
+
+    function togglePlay() { if (isPlaying) stopAnimation(); else startAnimation(); }
+
+    timeSlider.addEventListener('input', function() {
+        stopAnimation();
+        updateFrame(parseInt(this.value));
+    });
+
+    function locateMe() {
+        map.locate({setView: true, maxZoom: 10});
+        map.on('locationfound', function(e) {
+            L.circleMarker(e.latlng, {radius: 8, fillColor: "#38BDF8", color: "#ffffff", weight: 3, fillOpacity: 1}).addTo(map);
+        });
+    }
+</script>
+</body>
+</html>

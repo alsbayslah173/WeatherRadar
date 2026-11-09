@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_gradient"
+    android:fitsSystemWindows="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:paddingTop="40dp">
+
+        <!-- الشريط العلوي -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="24dp"
+            android:layoutDirection="rtl">
+
+            <TextView
+                android:id="@+id/btnBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="↩"
+                android:textColor="#FFFFFF"
+                android:textSize="28sp"
+                android:padding="8dp"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="جودة الهواء"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:gravity="center"/>
+                
+            <View android:layout_width="44dp" android:layout_height="1dp"/>
+        </LinearLayout>
+
+        <!-- الرقم الكبير -->
+        <TextView
+            android:id="@+id/tvAqiNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="--"
+            android:textColor="#FFB300"
+            android:textSize="110sp"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-thin"/>
+
+        <TextView
+            android:id="@+id/tvAqiStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="جاري التحميل..."
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- النصيحة -->
+        <TextView
+            android:id="@+id/tvAdvice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="#E0E0E0"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:layout_marginBottom="32dp"
+            android:paddingHorizontal="16dp"/>
+
+        <!-- تفاصيل الغازات -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@android:color/transparent"
+            app:cardCornerRadius="28dp"
+            app:cardElevation="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/bg_card_glass"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="تفاصيل الملوثات"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="16dp"
+                    android:gravity="end"/>
+
+                <!-- PM2.5 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layoutDirection="rtl"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="8dp">
+                    <TextView android:layout_width="80dp" android:layout_height="wrap_content" android:text="PM2.5" android:textColor="#FFFFFF" android:textSize="16sp" android:textStyle="bold"/>
+                    <ProgressBar android:id="@+id/pbPm25" style="?android:attr/progressBarStyleHorizontal" android:layout_width="0dp" android:layout_weight="1" android:layout_height="8dp" android:progressTint="#FF5252" android:progress="0"/>
+                    <TextView android:id="@+id/tvPm25" android:layout_width="60dp" android:layout_height="wrap_content" android:text="--" android:textColor="#FFFFFF" android:textSize="16sp" android:gravity="end"/>
+                </LinearLayout>
+
+                <!-- PM10 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layoutDirection="rtl"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="8dp">
+                    <TextView android:layout_width="80dp" android:layout_height="wrap_content" android:text="PM10" android:textColor="#FFFFFF" android:textSize="16sp" android:textStyle="bold"/>
+                    <ProgressBar android:id="@+id/pbPm10" style="?android:attr/progressBarStyleHorizontal" android:layout_width="0dp" android:layout_weight="1" android:layout_height="8dp" android:progressTint="#FF9800" android:progress="0"/>
+                    <TextView android:id="@+id/tvPm10" android:layout_width="60dp" android:layout_height="wrap_content" android:text="--" android:textColor="#FFFFFF" android:textSize="16sp" android:gravity="end"/>
+                </LinearLayout>
+
+                <!-- CO -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layoutDirection="rtl"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="8dp">
+                    <TextView android:layout_width="80dp" android:layout_height="wrap_content" android:text="CO" android:textColor="#FFFFFF" android:textSize="16sp" android:textStyle="bold"/>
+                    <ProgressBar android:id="@+id/pbCo" style="?android:attr/progressBarStyleHorizontal" android:layout_width="0dp" android:layout_weight="1" android:layout_height="8dp" android:progressTint="#4CAF50" android:progress="0"/>
+                    <TextView android:id="@+id/tvCo" android:layout_width="60dp" android:layout_height="wrap_content" android:text="--" android:textColor="#FFFFFF" android:textSize="16sp" android:gravity="end"/>
+                </LinearLayout>
+
+                <!-- NO2 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layoutDirection="rtl"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="8dp">
+                    <TextView android:layout_width="80dp" android:layout_height="wrap_content" android:text="NO2" android:textColor="#FFFFFF" android:textSize="16sp" android:textStyle="bold"/>
+                    <ProgressBar android:id="@+id/pbNo2" style="?android:attr/progressBarStyleHorizontal" android:layout_width="0dp" android:layout_weight="1" android:layout_height="8dp" android:progressTint="#2196F3" android:progress="0"/>
+                    <TextView android:id="@+id/tvNo2" android:layout_width="60dp" android:layout_height="wrap_content" android:text="--" android:textColor="#FFFFFF" android:textSize="16sp" android:gravity="end"/>
+                </LinearLayout>
+
+                <!-- SO2 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layoutDirection="rtl"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="8dp">
+                    <TextView android:layout_width="80dp" android:layout_height="wrap_content" android:text="SO2" android:textColor="#FFFFFF" android:textSize="16sp" android:textStyle="bold"/>
+                    <ProgressBar android:id="@+id/pbSo2" style="?android:attr/progressBarStyleHorizontal" android:layout_width="0dp" android:layout_weight="1" android:layout_height="8dp" android:progressTint="#9C27B0" android:progress="0"/>
+                    <TextView android:id="@+id/tvSo2" android:layout_width="60dp" android:layout_height="wrap_content" android:text="--" android:textColor="#FFFFFF" android:textSize="16sp" android:gravity="end"/>
+                </LinearLayout>
+
+                <!-- O3 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layoutDirection="rtl"
+                    android:gravity="center_vertical">
+                    <TextView android:layout_width="80dp" android:layout_height="wrap_content" android:text="O3" android:textColor="#FFFFFF" android:textSize="16sp" android:textStyle="bold"/>
+                    <ProgressBar android:id="@+id/pbO3" style="?android:attr/progressBarStyleHorizontal" android:layout_width="0dp" android:layout_weight="1" android:layout_height="8dp" android:progressTint="#00BCD4" android:progress="0"/>
+                    <TextView android:id="@+id/tvO3" android:layout_width="60dp" android:layout_height="wrap_content" android:text="--" android:textColor="#FFFFFF" android:textSize="16sp" android:gravity="end"/>
+                </LinearLayout>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+</ScrollView>
