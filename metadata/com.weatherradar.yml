@@ -1,0 +1,30 @@
+Categories:
+  - Weather
+License: GPL-3.0-or-later
+AuthorName: Salah Salemin Al-Subaie
+AuthorEmail: alsbayslah173@users.noreply.github.com
+WebSite: https://github.com/alsbayslah173/WeatherRadar
+SourceCode: https://github.com/alsbayslah173/WeatherRadar
+IssueTracker: https://github.com/alsbayslah173/WeatherRadar/issues
+
+AutoName: WeatherRadar
+Summary: تطبيق طقس احترافي مع رادار حي
+Description: |
+    تطبيق WeatherRadar هو تطبيق طقس متكامل يتميز بواجهة زجاجية فاخرة،
+    توقعات لـ 24 ساعة و5 أيام، مؤشر جودة الهواء، وخريطة رادار حية تفاعلية.
+
+RepoType: git
+Repo: https://github.com/alsbayslah173/WeatherRadar.git
+
+Builds:
+  - versionName: 1.0.0
+    versionCode: 1
+    commit: main
+    subdir: app
+    gradle:
+      - yes
+
+AutoUpdateMode: Version
+UpdateCheckMode: Tags
+CurrentVersion: 1.0.0
+CurrentVersionCode: 1
